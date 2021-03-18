@@ -5,6 +5,9 @@
 #include <glm/ext.hpp>
 #include "imgui.h"
 
+#include "Scene.h"
+#include "Instance.h"
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -28,18 +31,18 @@ bool GraphicsProjectApp::startup() {
 	// create simple camera transforms
 	m_viewMatrix = glm::lookAt(vec3(10), vec3(0), vec3(0, 1, 0));
 	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, (float)getWindowWidth() / (float)getWindowHeight(), 0.1f, 1000.0f);
-	
-	
-	m_light.color = { 1, 1, 1 };
-	m_ambientLight = { 0.25f,0.25f,0.25f };
 
+	Light light;
+	light.m_color = { 1,1,1 };
+	light.m_direction = { 1, -1,1 };
 	
-	return LoadShaderAndMeshLogic();
+	return LoadShaderAndMeshLogic(light);
 }
 
 void GraphicsProjectApp::shutdown() {
 
 	Gizmos::destroy();
+	delete m_scene;
 }
 
 void GraphicsProjectApp::update(float deltaTime) {
@@ -64,6 +67,9 @@ void GraphicsProjectApp::update(float deltaTime) {
 	// add a transform so that we can see the axis
 	Gizmos::addTransform(mat4(1));
 
+
+	m_scene->GetLight().m_direction = glm::normalize(glm::vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
+	
 	m_camera.Update(deltaTime);
 	
 	aie::Input* input = aie::Input::getInstance();
@@ -81,12 +87,14 @@ void GraphicsProjectApp::draw() {
 
 	// update perspective based on screen size
 	//m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, getWindowWidth() / (float)getWindowHeight(), 0.1f, 1000.0f);
-	DrawShaderAndMeshes(projectionMatrix, viewMatrix);
+	//DrawShaderAndMeshes(projectionMatrix, viewMatrix);
 		
 	Gizmos::draw(projectionMatrix * viewMatrix);
+	m_scene->Draw();
 }
-bool GraphicsProjectApp::LoadShaderAndMeshLogic()
+bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 {
+	/*
 #pragma  region Quad
 
 	//load the vertex shader from a file
@@ -172,6 +180,7 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic()
 		-3,0,3,1
 	};
 #pragma endregion 
+	*/
 #pragma region Spear
 	//give file name, does it have textures, do we want to flip v (if it returns false no load)
 	if (m_spearMesh.load("./soulspear/soulspear.obj", true, true) == false)
@@ -224,11 +233,29 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic()
 		return false;
 	}
 #pragma endregion
+
+
+	m_scene = new Scene(&m_camera, glm::vec2(getWindowWidth(), getWindowHeight()), 
+		a_light, glm::vec3(0.25f));
+
+	for (int i = 0; i < 10; i++)
+	{
+		m_scene->AddInstances(new Instance(glm::vec3(i * 2, 0, 0), 
+										   glm::vec3(0, i * 30, 0), 
+										   glm::vec3(1), 
+										   &m_spearMesh, 
+										   &m_normalMapShader));
+	}
+	//add a red light on the left side and a green light on the right side
+	m_scene->GetPointLights().push_back(Light(vec3(5, 3, 0), vec3(1, 0, 0), 50));
+	m_scene->GetPointLights().push_back(Light(vec3(-5, 3, 0), vec3(0, 1, 0), 50));
+
+		
 	//if all pass without returning false then all has loaded properly
 	return true;
 }
 
-void GraphicsProjectApp::DrawShaderAndMeshes(glm::mat4 a_projectionMatrix, glm::mat4 a_viewMatrix)
+/*void GraphicsProjectApp::DrawShaderAndMeshes(glm::mat4 a_projectionMatrix, glm::mat4 a_viewMatrix)
 {
 	auto pvm = a_projectionMatrix * a_viewMatrix * glm::mat4(0);
 
@@ -302,25 +329,10 @@ void GraphicsProjectApp::DrawShaderAndMeshes(glm::mat4 a_projectionMatrix, glm::
 #pragma endregion 
 	//NORMALMAPSHADER
 #pragma region NormalShader
-	m_normalMapShader.bind();
-
-	//Bind the camera position
-	m_normalMapShader.bindUniform("CameraPosition", vec3(glm::inverse(a_viewMatrix)[3]));
-	m_normalMapShader.bindUniform("AmbientColor", m_ambientLight);
-	m_normalMapShader.bindUniform("LightColor", m_light.color);
-	m_normalMapShader.bindUniform("LightDirection", m_light.direction);
-
-#pragma endregion
 	
-#pragma region Spear
-
-	pvm = a_projectionMatrix * a_viewMatrix * m_spearTransform;
-	m_normalMapShader.bindUniform("ProjectionViewModel", pvm);
-	m_normalMapShader.bindUniform("ModelMatrix", m_spearTransform);
-	m_spearMesh.draw();
 
 #pragma endregion
-}
+}*/
 
 void GraphicsProjectApp::ImguiLogic()
 {
@@ -328,24 +340,24 @@ void GraphicsProjectApp::ImguiLogic()
 	ImGui::Begin("Scene Light Settings");
 
 	//scene lighting options
-	ImGui::DragFloat3("Sunlight Direction", &m_light.direction[0], 0.1f, -1.0f, 1.0f);
-	ImGui::DragFloat3("Sunlight Color", &m_light.color[0], 0.1f, 0.0f, 2.0f);
+	ImGui::DragFloat3("Sunlight Direction", &m_scene->GetLight().m_direction[0], 0.1f, -1.0f, 1.0f);
+	ImGui::DragFloat3("Sunlight Color", &m_scene->GetLight().m_color[0], 0.1f, 0.0f, 2.0f);
 
 	//model colors
-	ImGui::DragFloat3("Bunny Color", &bunnyColor[0], 0.1f, 0, 2);
-	ImGui::DragFloat3("Dragon Color", &dragonColor[0], 0.1f, 0, 2);
-	ImGui::DragFloat3("Lucy Color", &LucyColor[0], 0.1f, 0, 2);
-	ImGui::DragFloat3("Buddha Color", &BuddhaColor[0], 0.1f, 0, 2);
+	//ImGui::DragFloat3("Bunny Color", &bunnyColor[0], 0.1f, 0, 2);
+	//ImGui::DragFloat3("Dragon Color", &dragonColor[0], 0.1f, 0, 2);
+	//ImGui::DragFloat3("Lucy Color", &LucyColor[0], 0.1f, 0, 2);
+	//ImGui::DragFloat3("Buddha Color", &BuddhaColor[0], 0.1f, 0, 2);
 
 	//model transforms the 0000 is to give them basic values not the 29547y29874 they start with 
 	
-	ImGui::SliderFloat3("Bunny Transform",&imguiPos[0], -10, 10);
+	//ImGui::SliderFloat3("Bunny Transform",&imguiPos[0], -10, 10);
 	
-	if(ImGui::Button("Apply"))
+	/*if(ImGui::Button("Apply"))
 	{
 		m_bunnyTransform *= resetMatrix;
 		m_bunnyTransform = glm::translate(m_bunnyTransform, imguiPos);
-	}
+	}*/
 
 
 	

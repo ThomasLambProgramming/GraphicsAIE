@@ -1,13 +1,4 @@
-﻿  Camera.cpp
-C:\Users\Mcsor\Desktop\GraphicsAIE\GraphicsProject\Camera.cpp(53,11): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\Mcsor\Desktop\GraphicsAIE\GraphicsProject\Camera.cpp(54,11): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  GraphicsProjectApp.cpp
-C:\Users\Mcsor\Desktop\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(79,93): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-C:\Users\Mcsor\Desktop\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(79,74): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-  main.cpp
-  Mesh.cpp
-  OBJMesh.cpp
-  Shader.cpp
-  Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  GraphicsProject.vcxproj -> C:\Users\Mcsor\Desktop\GraphicsAIE\temp\GraphicsProject\x64\Debug\GraphicsProject.exe
+﻿  GraphicsProjectApp.cpp
+C:\Users\s200498\Desktop\Yeet\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(85,93): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\s200498\Desktop\Yeet\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(85,74): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  GraphicsProject.vcxproj -> C:\Users\s200498\Desktop\Yeet\GraphicsAIE\temp\GraphicsProject\x64\Debug\GraphicsProject.exe

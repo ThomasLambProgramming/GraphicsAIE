@@ -1,12 +1,1 @@
-﻿  imgui.cpp
-  imgui_draw.cpp
-  Application.cpp
-  Font.cpp
-  Gizmos.cpp
-  imgui_glfw3.cpp
-  Input.cpp
-  Renderer2D.cpp
-  Texture.cpp
-  Generating Code...
-  gl_core_4_4.c
-  Bootstrap.vcxproj -> C:\Users\Mcsor\Desktop\GraphicsAIE\temp\Bootstrap\x64\Debug\Bootstrap.lib
+﻿  Bootstrap.vcxproj -> C:\Users\s200498\Desktop\Yeet\GraphicsAIE\temp\Bootstrap\x64\Debug\Bootstrap.lib

@@ -8,6 +8,8 @@
 #include "OBJMesh.h"
 #include "Camera.h"
 
+#include "Instance.h"
+#include "Scene.h"
 class GraphicsProjectApp : public aie::Application {
 public:
 
@@ -20,9 +22,9 @@ public:
 	virtual void update(float deltaTime);
 	virtual void draw();
 
-	bool LoadShaderAndMeshLogic();
+	bool LoadShaderAndMeshLogic(Light a_light);
 
-	void DrawShaderAndMeshes(glm::mat4, glm::mat4);
+	//void DrawShaderAndMeshes(glm::mat4, glm::mat4);
 	void ImguiLogic();
 
 protected:
@@ -72,20 +74,27 @@ protected:
 		1,1,1,1,
 		0,0,0,1
 	};
+
+
+	Scene* m_scene;
+
 	
-	struct Light
+	/*struct Light
 	{
 		glm::vec3 direction;
 		glm::vec3 color;
-	};
+	};*/
 	
-	Light m_light;
+	//Light m_light;
 
 	//this is the intensity of each color in the scene as this applys to every model
 	//its a global kind of thing and controlls the rgb thing
 	//this seems to be the color of the ambient light 
-	glm::vec3 m_ambientLight;
+	//glm::vec3 m_ambientLight;
 
+
+
+	
 	// camera transforms
 	glm::mat4	m_viewMatrix;
 	glm::mat4	m_projectionMatrix;
