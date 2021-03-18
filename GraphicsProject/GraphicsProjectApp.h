@@ -78,6 +78,21 @@ protected:
 
 	Scene* m_scene;
 
+
+
+	//So from here a imported model has to be implemented, a light has to be moving in the scene (make moveable)
+	//with imgui, by default none of these lights can share a color, make imgui to control position, rotation and scale of
+	//models, do the same with lights but instead of scale its color, make a sphere gizmo to represent the position.
+
+	//make a flyby camera and at least three stationary cameras that you can switch between and ui appears on screen
+	//to tell the user what camera is beiong used
+
+	//Then we must implement one of the following
+		//render targets, post processing, quaternions, particle effects, shadows.
+
+
+
+	
 	
 	/*struct Light
 	{
