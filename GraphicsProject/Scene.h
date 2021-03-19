@@ -33,8 +33,11 @@ public:
 	void AddInstances(Instance* a_instance);
 	void Draw();
 
+	void ImGuiScene();
+
 	Camera* GetCamera() { return m_camera; }
 	glm::vec2 GetWindowSize() { return m_windowSize; }
+
 	Light& GetLight() { return m_light; }
 	glm::vec3 GetAmbientLight() { return m_ambientLight; }
 
@@ -49,11 +52,13 @@ protected:
 	Camera* m_camera;
 	glm::vec2 m_windowSize;
 
+	//this is a general light to be the sun
 	Light m_light;
-	Light m_sunLight;
+	
 	std::vector<Light> m_pointLights;
 	glm::vec3 m_ambientLight;
 
+	//objects
 	std::list<Instance*> m_instances;
 
 	glm::vec3 m_pointLightPositions[MAX_LIGHTS];

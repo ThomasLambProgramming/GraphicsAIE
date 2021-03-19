@@ -4,9 +4,11 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include "imgui.h"
-
+#include <string>
 #include "Scene.h"
 #include "Instance.h"
+#include <sstream>
+#include <iostream>
 
 using glm::vec3;
 using glm::vec4;
@@ -54,12 +56,8 @@ void GraphicsProjectApp::update(float deltaTime) {
 	vec4 white(1);
 	vec4 black(0, 0, 0, 1);
 	for (int i = 0; i < 21; ++i) {
-		Gizmos::addLine(vec3(-10 + i, 0, 10),
-						vec3(-10 + i, 0, -10),
-						i == 10 ? white : black);
-		Gizmos::addLine(vec3(10, 0, -10 + i),
-						vec3(-10, 0, -10 + i),
-						i == 10 ? white : black);
+		Gizmos::addLine(vec3(-10 + i, 0, 10), vec3(-10 + i, 0, -10), i == 10 ? white : black);
+		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? white : black);
 	}
 	ImguiLogic();
 	float time = getTime();
@@ -73,7 +71,6 @@ void GraphicsProjectApp::update(float deltaTime) {
 	m_camera.Update(deltaTime);
 	
 	aie::Input* input = aie::Input::getInstance();
-
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 }
@@ -85,46 +82,12 @@ void GraphicsProjectApp::draw() {
 	glm::mat4 projectionMatrix = m_camera.GetProjectionMatrix(getWindowWidth(), getWindowHeight());
 	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
 
-	// update perspective based on screen size
-	//m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, getWindowWidth() / (float)getWindowHeight(), 0.1f, 1000.0f);
-	//DrawShaderAndMeshes(projectionMatrix, viewMatrix);
-		
 	Gizmos::draw(projectionMatrix * viewMatrix);
 	m_scene->Draw();
 }
 bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 {
-	
-
-#pragma region Dragon
-	if (m_dragonMesh.load("./stanford/Dragon.obj") == false)
-	{
-		printf("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE dragon didnt load u idiot");
-		return false;
-	}
-	m_dragonTransform = {
-		0.5f,0,0,0,
-		0,0.5f,0,0,
-		0,0,0.5f,0,
-		3,0,3,1
-	};
-#pragma endregion
-
-#pragma region Spear
-	//give file name, does it have textures, do we want to flip v (if it returns false no load)
-	if (m_spearMesh.load("./soulspear/soulspear.obj", true, true) == false)
-	{
-		printf("Soul spear Mesh Failed!\n");
-		return false;
-	}
-	m_spearTransform = {
-		0.5f,0,0,0,
-		0,0.5f,0,0,
-		0,0,0.5f,0,
-		0,0,0,1
-	};
-#pragma endregion
-#pragma region Phong
+#pragma region Shaders
 	
 	m_phongShader.loadShader(aie::eShaderStage::VERTEX, "./shaders/phong.vert");
 	m_phongShader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/phong.frag");
@@ -134,8 +97,7 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 		printf(m_phongShader.getLastError());
 		return false;
 	}
-#pragma endregion 
-#pragma region TextureShader
+
 	m_textureShader.loadShader(aie::eShaderStage::VERTEX, "./shaders/textured.vert");
 	m_textureShader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/textured.frag");
 	if (m_textureShader.link() == false)
@@ -144,8 +106,7 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 		printf(m_textureShader.getLastError());
 		return false;
 	}
-#pragma endregion
-#pragma region NormalMapShader
+
 	m_normalMapShader.loadShader(aie::eShaderStage::VERTEX, "./shaders/normalMap.vert");
 	m_normalMapShader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/normalMap.frag");
 	if (m_normalMapShader.link() == false)
@@ -155,36 +116,52 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 		return false;
 	}
 #pragma endregion
-
-
+#pragma region Meshes
+	if (m_dragonMesh.load("./stanford/Dragon.obj") == false)
+	{
+		printf("Dragon didnt load");
+		return false;
+	}
+	
+	if (m_spearMesh.load("./soulspear/soulspear.obj", true, true) == false)
+	{
+		printf("Spear Didnt load");
+		return false;
+	}
+#pragma endregion
 
 	m_scene = new Scene(&m_camera, glm::vec2(getWindowWidth(), getWindowHeight()), 
 		a_light, glm::vec3(0.25f));
 
+	//Create an instance out of dragon mesh and add to scene
+	m_scene->AddInstances(new Instance(glm::vec3(5, 0, 5),
+		glm::vec3(0, 0, 0),
+		glm::vec3(0.5f, 0.5f, 0.5f),
+		&m_dragonMesh,
+		&m_phongShader, "Dragon"));
+
+
 	for (int i = 0; i < 10; i++)
 	{
-		if (i == 9)
+		std::string name = "Spear :" + std::to_string(i);
+		
+		if (i % 2 == 0)
 		{
-			m_scene->AddInstances(new Instance(glm::vec3(5, 0, 5 ),
-											 glm::vec3(0, 0, 0),
-													   glm::vec3(0.5f,0.5f,0.5f),
-													   &m_dragonMesh,
-													   &m_phongShader));
+			m_scene->AddInstances(new Instance(glm::vec3(i * 2, 0, 0), glm::vec3(0, 90, 0),
+				glm::vec3(1), &m_spearMesh, &m_normalMapShader, name));
 		}
 		else
-		{
-			
-		m_scene->AddInstances(new Instance(glm::vec3(i * 2, 0, 0), 
-										   glm::vec3(0, i * 30, 0), 
-										   glm::vec3(1), 
-										   &m_spearMesh, 
-										   &m_normalMapShader));
+		{	
+			m_scene->AddInstances(new Instance(glm::vec3(i * 2, 0, 0), glm::vec3(0, 0, 0),
+				glm::vec3(1), &m_spearMesh, &m_normalMapShader, name));
 		}
-		
 	}
 	//add a red light on the left side and a green light on the right side
 	m_scene->GetPointLights().push_back(Light(vec3(5, 3, 0), vec3(1, 0, 0), 50));
 	m_scene->GetPointLights().push_back(Light(vec3(-5, 3, 0), vec3(0, 1, 0), 50));
+
+	//add a third light to be the dynamic light
+	m_scene->GetPointLights().push_back(Light(vec3(0, 5, 0), vec3(1, 1, 1), 30));
 
 		
 	//if all pass without returning false then all has loaded properly
@@ -194,12 +171,12 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 
 void GraphicsProjectApp::ImguiLogic()
 {
-	
-	ImGui::Begin("Scene Light Settings");
-
-	//scene lighting options
-	ImGui::DragFloat3("Sunlight Direction", &m_scene->GetLight().m_direction[0], 0.1f, -1.0f, 1.0f);
-	ImGui::DragFloat3("Sunlight Color", &m_scene->GetLight().m_color[0], 0.1f, 0.0f, 2.0f);
-	
+	ImGui::Begin("Scene Settings");
+	//This is seperate so only the logic of each scene needs to be called
+	//in case of multiple scenes the current scene can be loaded and have its own logic called
+	m_scene->ImGuiScene();
 	ImGui::End();
 }
+
+
+
