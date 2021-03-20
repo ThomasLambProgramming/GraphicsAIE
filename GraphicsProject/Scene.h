@@ -33,6 +33,8 @@ public:
 	void AddInstances(Instance* a_instance);
 	void Draw();
 
+	void ChangeCamera(int ID);
+
 	void ImGuiScene();
 
 	Camera* GetCamera() { return m_camera; }
@@ -47,9 +49,13 @@ public:
 
 	std::vector<Light>& GetPointLights() { return m_pointLights; }
 
+	void AddCamera(Camera* a_camera) { m_cameraList.push_back(a_camera); }
 
 protected:
 	Camera* m_camera;
+
+	std::vector<Camera*> m_cameraList;
+
 	glm::vec2 m_windowSize;
 
 	//this is a general light to be the sun

@@ -13,7 +13,7 @@
 class GraphicsProjectApp : public aie::Application {
 protected:
 	//camera
-	Camera m_camera;
+	Camera* m_camera;
 
 	//since we are only displaying the models we dont need
 	//multiple scenes

@@ -34,6 +34,10 @@ bool GraphicsProjectApp::startup() {
 	m_viewMatrix = glm::lookAt(vec3(10), vec3(0), vec3(0, 1, 0));
 	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, (float)getWindowWidth() / (float)getWindowHeight(), 0.1f, 1000.0f);
 
+	m_camera = new Camera();
+	m_camera->SetID(1);
+	
+
 	Light light;
 	light.m_color = { 1,1,1 };
 	light.m_direction = { 1, -1,1 };
@@ -68,9 +72,28 @@ void GraphicsProjectApp::update(float deltaTime) {
 
 	m_scene->GetLight().m_direction = glm::normalize(glm::vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
 	
-	m_camera.Update(deltaTime);
+	m_camera->Update(deltaTime);
 	
 	aie::Input* input = aie::Input::getInstance();
+
+
+	if (input->isKeyDown(aie::INPUT_KEY_1))
+		m_scene->ChangeCamera(1);
+	else if (input->isKeyDown(aie::INPUT_KEY_2))
+	 	m_scene->ChangeCamera(2);
+	else if (input->isKeyDown(aie::INPUT_KEY_3))
+		m_scene->ChangeCamera(3);
+	else if (input->isKeyDown(aie::INPUT_KEY_4))
+		m_scene->ChangeCamera(4);
+	m_camera = m_scene->GetCamera();
+
+	if (input->isKeyDown(aie::INPUT_KEY_5))
+	{
+		glm::vec2 temp = m_camera->GiveRotation();
+		std::cout << "m_theta :" << temp.x << "  m_phi:" << temp.y << std::endl;
+	}
+		
+
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 }
@@ -79,8 +102,8 @@ void GraphicsProjectApp::draw() {
 
 	// wipe the screen to the background colour
 	clearScreen();
-	glm::mat4 projectionMatrix = m_camera.GetProjectionMatrix(getWindowWidth(), getWindowHeight());
-	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
+	glm::mat4 projectionMatrix = m_camera->GetProjectionMatrix(getWindowWidth(), getWindowHeight());
+	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
 
 	Gizmos::draw(projectionMatrix * viewMatrix);
 	m_scene->Draw();
@@ -130,8 +153,33 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 	}
 #pragma endregion
 
-	m_scene = new Scene(&m_camera, glm::vec2(getWindowWidth(), getWindowHeight()), 
+	m_scene = new Scene(m_camera, glm::vec2(getWindowWidth(), getWindowHeight()), 
 		a_light, glm::vec3(0.25f));
+
+	//Three stationary lights
+	Camera* ZAxis = new Camera();
+	ZAxis->SetStationary(true);
+	ZAxis->SetID(2);
+	ZAxis->SetPosition({ 0.0f,4.0f,20.0f });
+	ZAxis->SetRotation(-90.0f, 0.0f);
+	m_scene->AddCamera(ZAxis);
+
+	Camera* YAxis = new Camera();
+	YAxis->SetStationary(false);
+	YAxis->SetID(3);
+	YAxis->SetPosition({ 0.0f,20.0f,0.0f });
+	YAxis->SetRotation(0.0f, -90.0f);
+	m_scene->AddCamera(YAxis);
+
+	Camera* XAxis = new Camera();
+	XAxis->SetStationary(false);
+	XAxis->SetID(4);
+	XAxis->SetPosition({-20.0f, 4.0f, 0.0f });
+	XAxis->SetRotation();
+	m_scene->AddCamera(XAxis);
+
+	//couldnt add the camera in startup due to the scenes instance not being created yet
+	m_scene->AddCamera(m_camera);
 
 	//Create an instance out of dragon mesh and add to scene
 	m_scene->AddInstances(new Instance(glm::vec3(5, 0, 5),

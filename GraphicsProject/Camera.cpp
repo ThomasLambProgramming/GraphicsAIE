@@ -12,10 +12,14 @@ Camera::Camera()
 
 void Camera::Update(float a_deltaTime)
 {
+	if (isStationary)
+		return;
+
 	aie::Input* input = aie::Input::getInstance();
 	float thetaR = glm::radians(m_theta);
 	float phiR = glm::radians(m_phi);
 
+	
 	//calculate the forwards and right axes and the up axis for the camera
 	glm::vec3 forward(glm::cos(phiR) * glm::cos(thetaR),
 		glm::sin(phiR), glm::cos(phiR) * glm::sin(thetaR));
@@ -86,3 +90,11 @@ glm::mat4 Camera::GetProjectionMatrix(float a_width, float a_height)
 	return glm::perspective(glm::pi<float>() * 0.25f, 
 		a_width/ a_height, 0.1f, 1000.0f);
 }
+
+void Camera::SetRotation(float x, float y)
+{
+	m_theta = x;
+	m_phi = y;
+}
+
+
