@@ -105,6 +105,13 @@ void GraphicsProjectApp::draw() {
 	glm::mat4 projectionMatrix = m_camera->GetProjectionMatrix(getWindowWidth(), getWindowHeight());
 	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
 
+	for (auto i : m_scene->GetPointLights())
+	{
+		glm::vec4 temp(i.m_color.r, i.m_color.g, i.m_color.b, 1);
+		Gizmos::addSphere(i.m_direction, 1.0f, 10, 10, temp);
+	}
+
+
 	Gizmos::draw(projectionMatrix * viewMatrix);
 	m_scene->Draw();
 }
@@ -205,8 +212,8 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 		}
 	}
 	//add a red light on the left side and a green light on the right side
-	m_scene->GetPointLights().push_back(Light(vec3(5, 3, 0), vec3(1, 0, 0), 50));
-	m_scene->GetPointLights().push_back(Light(vec3(-5, 3, 0), vec3(0, 1, 0), 50));
+	m_scene->GetPointLights().push_back(Light(vec3(5, 4, 5), vec3(1, 0, 0), 50));
+	m_scene->GetPointLights().push_back(Light(vec3(-5, 3, 5), vec3(0, 1, 0), 50));
 
 	//add a third light to be the dynamic light
 	m_scene->GetPointLights().push_back(Light(vec3(0, 5, 0), vec3(1, 1, 1), 30));

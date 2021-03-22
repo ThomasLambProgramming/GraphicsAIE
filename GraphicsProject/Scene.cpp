@@ -89,6 +89,19 @@ void Scene::ImGuiScene()
 				ImGui::Unindent();
 			}
 		}
+		
+
+	}
+	if (ImGui::CollapsingHeader("Lights"))
+	{
+		int count = 0;
+		ImGui::Indent();
+		for (auto i = m_pointLights.begin(); i != m_pointLights.end(); i++)
+		{
+			count++;
+			std::string temp = "Light :" + std::to_string(count);
+			ImGui::SliderFloat3(temp.c_str(), &i->m_direction[0], -20.0f, 20.0f);
+		}
 	}
 	//light settings for each in m_scene 
 	//Dynamic
