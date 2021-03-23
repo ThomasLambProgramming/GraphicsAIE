@@ -60,6 +60,7 @@ void Scene::ImGuiScene()
 	glm::vec3 temp = { 0.0f, 0.0f, 0.0f };
 	if (ImGui::CollapsingHeader("Objects"))
 	{
+		ImGui::Indent();
 		for (auto i : m_instances)
 		{
 			if (ImGui::CollapsingHeader(i->m_objectName.c_str()))
@@ -70,10 +71,21 @@ void Scene::ImGuiScene()
 				ImGui::Indent();
 				ImGui::SliderFloat3(temp.c_str(), &i->GetTransform()[3][0], -20.0f, 20.f);
 
-				temp = i->m_objectName + "RotationX";
-				
-				ImGui::SliderFloat(temp.c_str(), &i->GetTransform()[0][3], -90.f, 90.f);
+				temp = i->m_objectName + " Scale";
+				float tempScale[3];
+				tempScale[0] = i->GetTransform()[0][0];
+				tempScale[1] = i->GetTransform()[1][1];
+				tempScale[2] = i->GetTransform()[2][2];
 
+				ImGui::SliderFloat3(temp.c_str(), tempScale, 0.0f, 5.0f);
+
+				float* x = &i->GetTransform()[0][0];
+				float* y = &i->GetTransform()[1][1];
+				float* z = &i->GetTransform()[2][2];
+
+				*x = tempScale[0];
+				*y = tempScale[1];
+				*z = tempScale[2];
 
 				//This Rotates (work with that later for showing off model kind of thing)
 				/*
@@ -89,8 +101,7 @@ void Scene::ImGuiScene()
 				ImGui::Unindent();
 			}
 		}
-		
-
+		ImGui::Unindent();
 	}
 	if (ImGui::CollapsingHeader("Lights"))
 	{
