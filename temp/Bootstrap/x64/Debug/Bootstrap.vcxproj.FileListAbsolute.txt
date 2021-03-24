@@ -1,3 +1,4 @@
 C:\Users\Mcsor\Desktop\GraphicsAIE\temp\Bootstrap\x64\Debug\Bootstrap.lib
 C:\Users\Mcsor\Desktop\GraphicsAIE\temp\Bootstrap\x64\Debug\Bootstrap.pdb
 C:\Users\Luke\Desktop\GraphicsAIE\temp\Bootstrap\x64\Debug\Bootstrap.lib
+C:\Users\Thomas Lamb\Desktop\GraphicsAIE\temp\Bootstrap\x64\Debug\Bootstrap.lib
