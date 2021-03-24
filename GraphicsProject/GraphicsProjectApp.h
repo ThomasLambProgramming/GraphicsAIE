@@ -32,6 +32,8 @@ protected:
 	//meshes
 	aie::OBJMesh m_dragonMesh;
 	aie::OBJMesh m_spearMesh;
+	aie::OBJMesh m_gunMesh;
+
 public:
 
 	GraphicsProjectApp();

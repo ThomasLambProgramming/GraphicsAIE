@@ -4,8 +4,6 @@
 #include <glm/ext.hpp>
 #include <string>
 #include "Camera.h"
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 
 Scene::Scene(Camera* a_camera, glm::vec2 a_windowSize, Light& a_light, glm::vec3 a_ambientLight)
 	: m_camera(a_camera), m_windowSize(a_windowSize), m_light(a_light), m_ambientLight(a_ambientLight)
@@ -57,7 +55,6 @@ void Scene::ImGuiScene()
 	// Change direction of lights
 	// add color to each light
 	// add rotation to models
-	// add an imported model
 	// Research and implement at least one of the following
 	// Render targets
 	// Post processing

@@ -158,6 +158,11 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 		printf("Spear Didnt load");
 		return false;
 	}
+	if (m_gunMesh.load("./M1_carbine/M1_carbine.obj", true, true) == false)
+	{
+		printf("Gun Didnt load");
+		return false;
+	}
 #pragma endregion
 
 	m_scene = new Scene(m_camera, glm::vec2(getWindowWidth(), getWindowHeight()), 
@@ -194,6 +199,12 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 		glm::vec3(0.5f, 0.5f, 0.5f),
 		&m_dragonMesh,
 		&m_phongShader, "Dragon"));
+
+	m_scene->AddInstances(new Instance(glm::vec3(-3, 4.8f, 0.6f),
+		glm::vec3(-90.0f, 0, 0),
+		glm::vec3(0.1f, 0.1f, 0.1f),
+		&m_gunMesh,
+		&m_normalMapShader, "Gun"));
 
 
 	for (int i = 0; i < 10; i++)
