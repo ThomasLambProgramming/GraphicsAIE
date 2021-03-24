@@ -4,6 +4,8 @@
 #include <glm/ext.hpp>
 #include <string>
 #include "Camera.h"
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 Scene::Scene(Camera* a_camera, glm::vec2 a_windowSize, Light& a_light, glm::vec3 a_ambientLight)
 	: m_camera(a_camera), m_windowSize(a_windowSize), m_light(a_light), m_ambientLight(a_ambientLight)
@@ -50,6 +52,22 @@ void Scene::ChangeCamera(int ID)
 
 void Scene::ImGuiScene()
 {
+	// ---------TO ADD -------------
+	// Add what camera is being used
+	// Change direction of lights
+	// add color to each light
+	// add rotation to models
+	// add an imported model
+	// Research and implement at least one of the following
+	// Render targets
+	// Post processing
+	// Quaternions
+	// Particle Effects
+	// Shadows
+
+
+
+
 	//scene lighting options
 	ImGui::DragFloat3("Sunlight Direction", &GetLight().m_direction[0], 0.1f, -1.0f, 1.0f);
 	ImGui::DragFloat3("Sunlight Color", &GetLight().m_color[0], 0.1f, 0.0f, 2.0f);
@@ -86,6 +104,19 @@ void Scene::ImGuiScene()
 				*x = tempScale[0];
 				*y = tempScale[1];
 				*z = tempScale[2];
+
+
+				//this just displays every transform value
+				//i transposed it so it is then a row matrix so its easier to display the information 
+				/*glm::mat4 transposed = glm::transpose(i->GetTransform());
+				ImGui::SliderFloat4("1", &transposed[0][0], -10.0f, 10.0f);
+				ImGui::SliderFloat4("2", &transposed[1][0], -10.0f, 10.0f);
+				ImGui::SliderFloat4("3", &transposed[2][0], -10.0f, 10.0f);
+				ImGui::SliderFloat4("4", &transposed[3][0], -10.0f, 10.0f);
+				transposed = glm::transpose(transposed);
+
+				i->SetTransform(transposed);*/
+
 
 				//This Rotates (work with that later for showing off model kind of thing)
 				/*
