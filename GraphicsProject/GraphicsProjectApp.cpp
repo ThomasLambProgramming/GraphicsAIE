@@ -64,13 +64,15 @@ void GraphicsProjectApp::update(float deltaTime) {
 		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? white : black);
 	}
 	ImguiLogic();
-	float time = getTime();
 	
+	if (m_scene->RotateAmbient)
+	{
+		float time = getTime();
+		m_scene->GetLight().m_direction = glm::normalize(glm::vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
+	}
+
 	// add a transform so that we can see the axis
 	Gizmos::addTransform(mat4(1));
-
-
-	m_scene->GetLight().m_direction = glm::normalize(glm::vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
 	
 	m_camera->Update(deltaTime);
 	
@@ -86,13 +88,6 @@ void GraphicsProjectApp::update(float deltaTime) {
 	else if (input->isKeyDown(aie::INPUT_KEY_4))
 		m_scene->ChangeCamera(4);
 	m_camera = m_scene->GetCamera();
-
-	if (input->isKeyDown(aie::INPUT_KEY_5))
-	{
-		glm::vec2 temp = m_camera->GiveRotation();
-		std::cout << "m_theta :" << temp.x << "  m_phi:" << temp.y << std::endl;
-	}
-		
 
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
@@ -111,6 +106,10 @@ void GraphicsProjectApp::draw() {
 		Gizmos::addSphere(i.m_direction, 1.0f, 10, 10, temp);
 	}
 
+
+	Light sunLight = m_scene->GetLight();
+	glm::vec4 tempColor(sunLight.m_color.r, sunLight.m_color.g, sunLight.m_color.b, 1);
+	Gizmos::addLine({ 0,0,0 }, sunLight.m_direction * 4.0f, tempColor);
 
 	Gizmos::draw(projectionMatrix * viewMatrix);
 	m_scene->Draw();

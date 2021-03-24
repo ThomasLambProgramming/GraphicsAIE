@@ -51,6 +51,8 @@ public:
 
 	void AddCamera(Camera* a_camera) { m_cameraList.push_back(a_camera); }
 
+	bool RotateAmbient = false;
+
 protected:
 	Camera* m_camera;
 

@@ -54,22 +54,17 @@ void Scene::ImGuiScene()
 {
 	// ---------TO ADD -------------
 	// Add what camera is being used
-	// Change direction of lights
-	// add color to each light
 	// add rotation to models
+	//
 	// Research and implement at least one of the following
 	// Render targets
 	// Post processing
 	// Quaternions
 	// Particle Effects
 	// Shadows
+	// ---------END ----------------
 
 
-	//scene lighting options
-	ImGui::DragFloat3("Sunlight Direction", &GetLight().m_direction[0], 0.1f, -1.0f, 1.0f);
-	ImGui::DragFloat3("Sunlight Color", &GetLight().m_color[0], 0.1f, 0.0f, 2.0f);
-	
-	glm::vec3 temp = { 0.0f, 0.0f, 0.0f };
 	if (ImGui::CollapsingHeader("Objects"))
 	{
 		ImGui::Indent();
@@ -113,7 +108,21 @@ void Scene::ImGuiScene()
 		}
 		ImGui::Unindent();
 	}
-	if (ImGui::CollapsingHeader("Lights"))
+	if (ImGui::CollapsingHeader("Ambient Light"))
+	{
+		ImGui::Indent();
+		if (ImGui::Button("Rotate Direction"))
+			RotateAmbient = !RotateAmbient;
+
+		std::string temp;
+		temp = "Light Direction";
+		ImGui::SliderFloat3(temp.c_str(), &m_light.m_direction[0], -20.0f, 20.0f);
+
+		temp = "Light Color";
+		ImGui::SliderFloat3(temp.c_str(), &m_light.m_color[0], 0.0f, 40.0f);
+		ImGui::Unindent();
+	}
+	if (ImGui::CollapsingHeader("Point Lights"))
 	{
 		int count = 0;
 		ImGui::Indent();
@@ -129,7 +138,7 @@ void Scene::ImGuiScene()
 				ImGui::SliderFloat3(temp.c_str(), &i->m_direction[0], -20.0f, 20.0f);
 
 				temp = "Light :" + std::to_string(count) + " Color";
-				ImGui::SliderFloat3(temp.c_str(), &i->m_color[0], 0.0f, 2.0f);
+				ImGui::SliderFloat3(temp.c_str(), &i->m_color[0], 0.0f, 40.0f);
 				ImGui::Unindent();
 			}
 		}
