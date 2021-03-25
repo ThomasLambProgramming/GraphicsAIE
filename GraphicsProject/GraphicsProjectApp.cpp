@@ -39,7 +39,7 @@ bool GraphicsProjectApp::startup() {
 	m_camera->SetID(1);
 	
 	m_emitter = new ParticleEmitter();
-	m_emitter->Initalise(1000, 500, 0.1f, 0.1f, 1, 5, 1, 0.1f, glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
+	m_emitter->Initalise(1000, 500, 0.1f, 1.0f, 1, 5, 1, 0.1f, glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
 
 	Light light;
 	light.m_color = { 1,1,1 };
@@ -78,7 +78,7 @@ void GraphicsProjectApp::update(float deltaTime) {
 	Gizmos::addTransform(mat4(1));
 	
 	m_camera->Update(deltaTime);
-	m_emitter->Update(deltaTime, m_camera->GetViewMatrix());
+	m_emitter->Update(deltaTime, m_camera->GetTransform());
 	
 	aie::Input* input = aie::Input::getInstance();
 
@@ -101,8 +101,8 @@ void GraphicsProjectApp::draw() {
 
 	// wipe the screen to the background colour
 	clearScreen();
-	glm::mat4 projectionMatrix = m_camera->GetProjectionMatrix(getWindowWidth(), getWindowHeight());
-	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
+	m_projectionMatrix = m_camera->GetProjectionMatrix(getWindowWidth(), getWindowHeight());
+	m_viewMatrix = m_camera->GetViewMatrix();
 
 	for (auto i : m_scene->GetPointLights())
 	{
@@ -121,12 +121,11 @@ void GraphicsProjectApp::draw() {
 	m_particleShader.bindUniform("ProjectionViewModel", pvm);
 	m_emitter->Draw();
 
-
 	Light sunLight = m_scene->GetLight();
 	glm::vec4 tempColor(sunLight.m_color.r, sunLight.m_color.g, sunLight.m_color.b, 1);
 	Gizmos::addLine({ 0,0,0 }, sunLight.m_direction * 4.0f, tempColor);
 
-	Gizmos::draw(projectionMatrix * viewMatrix);
+	Gizmos::draw(m_projectionMatrix * m_viewMatrix);
 	m_scene->Draw();
 }
 bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)

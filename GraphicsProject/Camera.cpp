@@ -78,7 +78,7 @@ glm::mat4 Camera::GetViewMatrix()
 {
 	float thetaR = glm::radians(m_theta);
 	float phiR = glm::radians(m_phi);
-	glm::vec3 forward(glm::cos(phiR) * glm::cos(thetaR),
+	forward = glm::vec3(glm::cos(phiR) * glm::cos(thetaR),
 		glm::sin(phiR), glm::cos(phiR) * glm::sin(thetaR));
 
 	
@@ -95,6 +95,14 @@ void Camera::SetRotation(float x, float y)
 {
 	m_theta = x;
 	m_phi = y;
+}
+
+glm::mat4 Camera::GetTransform()
+{
+	return glm::translate(glm::mat4(1), m_position)
+		* glm::rotate(glm::mat4(1), glm::radians(m_theta), glm::vec3(1, 0, 0))
+		* glm::rotate(glm::mat4(1), glm::radians(m_phi), glm::vec3(0, 1, 0));
+		
 }
 
 

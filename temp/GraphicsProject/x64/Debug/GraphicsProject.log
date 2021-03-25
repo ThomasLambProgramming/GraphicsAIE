@@ -1,2 +1,4 @@
-﻿  Scene.cpp
-  GraphicsProject.vcxproj -> C:\Users\s200498\Desktop\GraphicsAIE\temp\GraphicsProject\x64\Debug\GraphicsProject.exe
+﻿  GraphicsProjectApp.cpp
+C:\Users\Thomas Lamb\Desktop\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(104,86): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\Thomas Lamb\Desktop\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(104,67): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  GraphicsProject.vcxproj -> C:\Users\Thomas Lamb\Desktop\GraphicsAIE\temp\GraphicsProject\x64\Debug\GraphicsProject.exe

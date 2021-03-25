@@ -190,7 +190,7 @@ void ParticleEmitter::Emit()
 	//assign its starting position
 	particle.m_position = m_position;
 
-	//randomise its lifespan
+	//randomise its lifespandd
 	particle.m_lifetime = 0;
 	particle.m_lifespan = (rand() / (float)RAND_MAX) * 
 		(m_lifespanMax - m_lifespanMin) + m_lifespanMin;
