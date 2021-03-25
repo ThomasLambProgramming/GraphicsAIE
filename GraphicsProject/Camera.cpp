@@ -99,10 +99,13 @@ void Camera::SetRotation(float x, float y)
 
 glm::mat4 Camera::GetTransform()
 {
-	return glm::translate(glm::mat4(1), m_position)
-		* glm::rotate(glm::mat4(1), glm::radians(m_theta), glm::vec3(1, 0, 0))
-		* glm::rotate(glm::mat4(1), glm::radians(m_phi), glm::vec3(0, 1, 0));
-		
+	
+	return glm::mat4(
+		1, 0, 0, m_position.x,
+		0, 1, 0, m_position.y,
+		0, 0, 1, m_position.z,
+		0, 0, 0, 1
+	);
 }
 
 

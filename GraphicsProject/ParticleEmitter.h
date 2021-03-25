@@ -29,9 +29,24 @@ public:
 		const glm::vec4& a_startColour, const glm::vec4& a_endColour);
 	
 
-	void Update(float deltaTime, glm::mat4 &a_cameraTransform);
+	void Update(float deltaTime, glm::vec3 cameraPos);
 	void Emit();
 	void Draw();
+
+	float* GetEmitRate() { return &m_emitRate; }
+
+	float* GetMinLife() { return &m_lifespanMin; }
+	float* GetMaxLife() { return &m_lifespanMax; }
+
+	float* GetMinVel() { return &m_velocityMin; }
+	float* GetMax() { return &m_velocityMax; }
+
+	float* GetStartSize() { return &m_startSize; }
+	float* GetEndSize() { return &m_endSize; }
+
+	glm::vec4* GetStartColour() { return &m_startColour; }
+	glm::vec4* GetEndColour() { return &m_endColour; }
+
 
 protected:
 	Particle* m_particles;

@@ -105,7 +105,7 @@ void ParticleEmitter::Initalise(unsigned int a_maxParticles, unsigned int a_emit
 	delete[] indexData;
 }
 
-void ParticleEmitter::Update(float deltaTime, glm::mat4& a_cameraTransform)
+void ParticleEmitter::Update(float deltaTime, glm::vec3 cameraPos)
 {
 	m_emitTimer += deltaTime;
 	while (m_emitTimer > m_emitRate)
@@ -119,6 +119,7 @@ void ParticleEmitter::Update(float deltaTime, glm::mat4& a_cameraTransform)
 	{
 		Particle* particle = &m_particles[i];
 		particle->m_lifetime += deltaTime;
+
 		if (particle->m_lifetime >= particle->m_lifespan)
 		{
 			*particle = m_particles[m_firstDead - 1];
@@ -154,9 +155,9 @@ void ParticleEmitter::Update(float deltaTime, glm::mat4& a_cameraTransform)
 			//create all the xyz basis vectors to create a matrix four that will transform 
 			//the positions and rotations of the particles to face the correct way
 			//i know the explaination isnt the greatest but its so the "forward" axis is facing camera
-			glm::vec3 zAxis = glm::normalize(glm::vec3(a_cameraTransform[3]) - particle->m_position);
-			glm::vec3 xAxis = glm::cross(glm::vec3(a_cameraTransform[1]), zAxis);
-			glm::vec3 yAxis = glm::cross(zAxis, xAxis);
+			glm::vec3 zAxis = glm::normalize(cameraPos - particle->m_position);
+			glm::vec3 xAxis = glm::normalize(glm::cross(glm::vec3(cameraPos.x), zAxis));
+			glm::vec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
 
 
 			glm::mat4 billboard(glm::vec4(xAxis,0),
@@ -164,13 +165,18 @@ void ParticleEmitter::Update(float deltaTime, glm::mat4& a_cameraTransform)
 								glm::vec4(zAxis,0),
 								glm::vec4(0,0,0,1));
 
-			//the tutorial had me write it out 4 times but since only the number in the brackets changed 
-			//i put it in a for loop
-			for (int i = 0; i < 3; i++)
-			{
-				m_vertexData[quad * 4 + i].m_position = billboard *
-					m_vertexData[quad * 4 + i].m_position + glm::vec4(particle->m_position, 0);
-			}
+			m_vertexData[quad * 4 + 0].m_position = billboard * 
+				m_vertexData[quad * 4 + 0].m_position + glm::vec4(particle->m_position, 0);
+
+			m_vertexData[quad * 4 + 1].m_position = billboard *
+				m_vertexData[quad * 4 + 1].m_position + glm::vec4(particle->m_position, 0);
+
+			m_vertexData[quad * 4 + 2].m_position = billboard *
+				m_vertexData[quad * 4 + 2].m_position + glm::vec4(particle->m_position, 0);
+
+			m_vertexData[quad * 4 + 3].m_position = billboard *
+				m_vertexData[quad * 4 + 3].m_position + glm::vec4(particle->m_position, 0);
+
 			++quad;
 			
 		}

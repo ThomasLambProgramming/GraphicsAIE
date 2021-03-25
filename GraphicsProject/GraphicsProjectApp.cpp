@@ -39,7 +39,11 @@ bool GraphicsProjectApp::startup() {
 	m_camera->SetID(1);
 	
 	m_emitter = new ParticleEmitter();
-	m_emitter->Initalise(1000, 500, 0.1f, 1.0f, 1, 5, 1, 0.1f, glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
+	m_emitter->Initalise(1000, 50, 
+		0.1f, 1.0f, 
+		1.0f, 5.0f, 
+		0.3f, 0.1f, 
+		glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
 
 	Light light;
 	light.m_color = { 1,1,1 };
@@ -78,7 +82,7 @@ void GraphicsProjectApp::update(float deltaTime) {
 	Gizmos::addTransform(mat4(1));
 	
 	m_camera->Update(deltaTime);
-	m_emitter->Update(deltaTime, m_camera->GetTransform());
+	m_emitter->Update(deltaTime, m_camera->GetPosition());
 	
 	aie::Input* input = aie::Input::getInstance();
 
@@ -263,6 +267,12 @@ void GraphicsProjectApp::ImguiLogic()
 	//This is seperate so only the logic of each scene needs to be called
 	//in case of multiple scenes the current scene can be loaded and have its own logic called
 	m_scene->ImGuiScene();
+
+	//PARTICLE SETTINGS
+	if (ImGui::CollapsingHeader("Particle Settings"))
+	{
+		ImGui::SliderFloat("", m_emitter->GetEmitRate())
+	}
 	ImGui::End();
 }
 
