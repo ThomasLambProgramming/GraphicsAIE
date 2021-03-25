@@ -42,7 +42,7 @@ public:
 
 	Light& GetLight() { return m_light; }
 	glm::vec3 GetAmbientLight() { return m_ambientLight; }
-
+	
 	int GetNumberLights() { return (int)m_pointLights.size(); }
 	glm::vec3* GetPointLightPositions() { return &m_pointLightPositions[0]; }
 	glm::vec3* GetPointLightColors() { return &m_pointLightColors[0]; }

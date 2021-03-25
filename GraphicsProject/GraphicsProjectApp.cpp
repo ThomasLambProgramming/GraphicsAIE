@@ -111,8 +111,13 @@ void GraphicsProjectApp::draw() {
 	}
 	//DRAWING PARTICLE EFFECTS
 	m_particleShader.bind();
-	m_emitter->MakeTransform(glm::vec3(2, 2, 2), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
-	auto pvm = m_projectionMatrix * m_viewMatrix;
+	glm::mat4 temp(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	);
+	auto pvm = m_projectionMatrix * m_viewMatrix * temp;
 	m_particleShader.bindUniform("ProjectionViewModel", pvm);
 	m_emitter->Draw();
 

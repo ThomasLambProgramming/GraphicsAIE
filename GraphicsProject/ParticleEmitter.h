@@ -33,9 +33,6 @@ public:
 	void Emit();
 	void Draw();
 
-	glm::mat4 GetTransform() { return m_transform; }
-	void MakeTransform(glm::vec3 a_position, glm::vec3 a_eulerAngles, glm::vec3 a_scale);
-
 protected:
 	Particle* m_particles;
 	unsigned int m_firstDead;

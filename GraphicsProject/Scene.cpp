@@ -61,8 +61,20 @@ void Scene::ImGuiScene()
 	// Shadows
 	// ---------END ----------------
 
-	std::string cameraID = "Current camera = " + std::to_string(m_camera->GetID());
+	std::string cameraID; 
+	int id = m_camera->GetID();
+	if (id == 1)
+		cameraID = "Current camera = Flyby";
+	else if (id == 2)
+		cameraID = "Current camera = X Axis";
+	else if (id == 3)
+		cameraID = "Current camera = Y Axis";
+	else
+		cameraID = "Current camera = Z Axis";
+	
 	ImGui::Text(cameraID.c_str());
+	ImGui::Text("Press 1 for flyby camera");
+	ImGui::Text("Press 2-4 for X Y Z Axis Stationary Cameras");
 	if (ImGui::CollapsingHeader("Objects"))
 	{
 		ImGui::Indent();
