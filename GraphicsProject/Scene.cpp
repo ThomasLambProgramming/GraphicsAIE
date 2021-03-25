@@ -53,9 +53,6 @@ void Scene::ChangeCamera(int ID)
 void Scene::ImGuiScene()
 {
 	// ---------TO ADD -------------
-	// Add what camera is being used
-	// add rotation to models
-	//
 	// Research and implement at least one of the following
 	// Render targets
 	// Post processing
@@ -64,7 +61,8 @@ void Scene::ImGuiScene()
 	// Shadows
 	// ---------END ----------------
 
-
+	std::string cameraID = "Current camera = " + std::to_string(m_camera->GetID());
+	ImGui::Text(cameraID.c_str());
 	if (ImGui::CollapsingHeader("Objects"))
 	{
 		ImGui::Indent();
@@ -92,16 +90,12 @@ void Scene::ImGuiScene()
 				//std::cout << euler.x << " " << euler.y << " " << euler.z << std::endl;
 				
 				temp = i->m_objectName + "Rotation";
-				glm::vec3 euler = glm::eulerAngles(o_rotation);
-				euler *= 180.f / 3.14159f;
-				ImGui::SliderFloat3(temp.c_str(), &euler[0], -90.0f, 90.f);
-				euler *= 3.14159f / 180.0f;
-				
+				ImGui::SliderFloat3(temp.c_str(), &i->m_rotation[0], -90.0f, 90.f);
 
 				temp = i->m_objectName + " Scale";
 				ImGui::SliderFloat3(temp.c_str(), &o_scale[0], 0.2f, 5.0f);
 
-				i->SetTransform(i->MakeTransform(o_translation, euler, o_scale));
+				i->SetTransform(i->MakeTransform(o_translation, i->m_rotation, o_scale));
 				
 				ImGui::Unindent();
 			}

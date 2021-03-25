@@ -10,6 +10,8 @@
 
 #include "Instance.h"
 #include "Scene.h"
+#include "ParticleEmitter.h"
+
 class GraphicsProjectApp : public aie::Application {
 protected:
 	//camera
@@ -18,6 +20,8 @@ protected:
 	//since we are only displaying the models we dont need
 	//multiple scenes
 	Scene* m_scene;
+
+	ParticleEmitter* m_emitter;
 
 	// camera transforms
 	glm::mat4	m_viewMatrix;
@@ -28,7 +32,7 @@ protected:
 	aie::ShaderProgram m_phongShader;
 	aie::ShaderProgram m_textureShader;
 	aie::ShaderProgram m_normalMapShader;
-
+	aie::ShaderProgram m_particleShader;
 	//meshes
 	aie::OBJMesh m_dragonMesh;
 	aie::OBJMesh m_spearMesh;

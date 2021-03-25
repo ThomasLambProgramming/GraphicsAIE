@@ -10,6 +10,7 @@
 #include <sstream>
 #include <iostream>
 
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -37,6 +38,8 @@ bool GraphicsProjectApp::startup() {
 	m_camera = new Camera();
 	m_camera->SetID(1);
 	
+	m_emitter = new ParticleEmitter();
+	m_emitter->Initalise(1000, 500, 0.1f, 0.1f, 1, 5, 1, 0.1f, glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
 
 	Light light;
 	light.m_color = { 1,1,1 };
@@ -64,7 +67,7 @@ void GraphicsProjectApp::update(float deltaTime) {
 		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? white : black);
 	}
 	ImguiLogic();
-	
+
 	if (m_scene->RotateAmbient)
 	{
 		float time = getTime();
@@ -75,6 +78,7 @@ void GraphicsProjectApp::update(float deltaTime) {
 	Gizmos::addTransform(mat4(1));
 	
 	m_camera->Update(deltaTime);
+	m_emitter->Update(deltaTime, m_camera->GetViewMatrix());
 	
 	aie::Input* input = aie::Input::getInstance();
 
@@ -105,6 +109,12 @@ void GraphicsProjectApp::draw() {
 		glm::vec4 temp(i.m_color.r, i.m_color.g, i.m_color.b, 1);
 		Gizmos::addSphere(i.m_direction, 1.0f, 10, 10, temp);
 	}
+	//DRAWING PARTICLE EFFECTS
+	m_particleShader.bind();
+	m_emitter->MakeTransform(glm::vec3(2, 2, 2), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
+	auto pvm = m_projectionMatrix * m_viewMatrix;
+	m_particleShader.bindUniform("ProjectionViewModel", pvm);
+	m_emitter->Draw();
 
 
 	Light sunLight = m_scene->GetLight();
@@ -117,7 +127,16 @@ void GraphicsProjectApp::draw() {
 bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 {
 #pragma region Shaders
-	
+
+	m_particleShader.loadShader(aie::eShaderStage::VERTEX, "./shaders/ParticleShader.vert");
+	m_particleShader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/ParticleShader.frag");
+	if (m_particleShader.link() == false)
+	{
+		printf("ParticleShader no load link fail \n");
+		printf(m_particleShader.getLastError());
+		return false;
+	}
+
 	m_phongShader.loadShader(aie::eShaderStage::VERTEX, "./shaders/phong.vert");
 	m_phongShader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/phong.frag");
 	if (m_phongShader.link() == false)
@@ -176,14 +195,14 @@ bool GraphicsProjectApp::LoadShaderAndMeshLogic(Light a_light)
 	m_scene->AddCamera(ZAxis);
 
 	Camera* YAxis = new Camera();
-	YAxis->SetStationary(false);
+	YAxis->SetStationary(true);
 	YAxis->SetID(3);
 	YAxis->SetPosition({ 0.0f,20.0f,0.0f });
 	YAxis->SetRotation(0.0f, -90.0f);
 	m_scene->AddCamera(YAxis);
 
 	Camera* XAxis = new Camera();
-	XAxis->SetStationary(false);
+	XAxis->SetStationary(true);
 	XAxis->SetID(4);
 	XAxis->SetPosition({-20.0f, 4.0f, 0.0f });
 	XAxis->SetRotation();

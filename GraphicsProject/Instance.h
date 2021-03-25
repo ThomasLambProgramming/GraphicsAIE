@@ -30,6 +30,7 @@ public:
 	static glm::mat4 MakeTransform(glm::vec3 a_position, glm::vec3 a_eulerAngles, glm::vec3 a_scale);
 
 	std::string m_objectName;
+	glm::vec3 m_rotation;
 protected:
 	glm::mat4 m_transform;
 	aie::OBJMesh* m_mesh;

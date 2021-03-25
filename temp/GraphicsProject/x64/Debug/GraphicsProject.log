@@ -1,2 +1,7 @@
-﻿  Scene.cpp
+﻿  GraphicsProjectApp.cpp
+C:\Users\s200498\Desktop\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(104,94): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\s200498\Desktop\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(104,75): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  ParticleEmitter.cpp
+  main.cpp
+  Generating Code...
   GraphicsProject.vcxproj -> C:\Users\s200498\Desktop\GraphicsAIE\temp\GraphicsProject\x64\Debug\GraphicsProject.exe

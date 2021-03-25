@@ -13,6 +13,8 @@ public:
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix(float a_width, float a_height);
 
+
+
 	void SetRotation(float x = 0.0f, float y = 0.0f);
 
 	glm::vec2 GiveRotation() { return { m_theta, m_phi }; }
