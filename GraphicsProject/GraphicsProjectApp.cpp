@@ -72,11 +72,8 @@ void GraphicsProjectApp::update(float deltaTime) {
 	}
 	ImguiLogic();
 
-	if (m_scene->RotateAmbient)
-	{
-		float time = getTime();
-		m_scene->GetLight().m_direction = glm::normalize(glm::vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
-	}
+	float time = getTime();
+	m_scene->GetLight().m_direction = glm::normalize(glm::vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
 
 	// add a transform so that we can see the axis
 	Gizmos::addTransform(mat4(1));
@@ -95,6 +92,7 @@ void GraphicsProjectApp::update(float deltaTime) {
 		m_scene->ChangeCamera(3);
 	else if (input->isKeyDown(aie::INPUT_KEY_4))
 		m_scene->ChangeCamera(4);
+
 	m_camera = m_scene->GetCamera();
 
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
@@ -271,7 +269,20 @@ void GraphicsProjectApp::ImguiLogic()
 	//PARTICLE SETTINGS
 	if (ImGui::CollapsingHeader("Particle Settings"))
 	{
-		ImGui::SliderFloat("", m_emitter->GetEmitRate())
+		ImGui::Indent();
+		ImGui::SliderFloat3("Position", &m_emitter->GetPosition()[0], -20.0f, 20.0f);
+		ImGui::SliderFloat("EmitRate", &m_emitter->m_imguiRate, 0.2f, 1000.0f);
+		m_emitter->SetEmitRate();
+
+		ImGui::SliderFloat("MinLife", m_emitter->GetMinLife(), 0.1f, 100.0f);
+		ImGui::SliderFloat("MaxLife", m_emitter->GetMaxLife(), 0.1f, 100.0f);
+		ImGui::SliderFloat("MinVelocity", m_emitter->GetMinVel(), 0.1f, 200.0f);
+		ImGui::SliderFloat("MaxVelocity", m_emitter->GetMaxVel(), 0.1f, 200.0f);
+		ImGui::SliderFloat("StartSize", m_emitter->GetStartSize(), 0.1f, 10.0f);
+		ImGui::SliderFloat("EndSize", m_emitter->GetEndSize(), 0.1f, 10.0f);
+		ImGui::SliderFloat4("StartColour", &m_emitter->GetStartColour()[0], 0.0f, 1.0f);
+		ImGui::SliderFloat4("EndColour", &m_emitter->GetEndColour()[0], 0.0f, 1.0f);
+		ImGui::Unindent();
 	}
 	ImGui::End();
 }

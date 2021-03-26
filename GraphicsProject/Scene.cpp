@@ -52,15 +52,6 @@ void Scene::ChangeCamera(int ID)
 
 void Scene::ImGuiScene()
 {
-	// ---------TO ADD -------------
-	// Research and implement at least one of the following
-	// Render targets
-	// Post processing
-	// Quaternions
-	// Particle Effects
-	// Shadows
-	// ---------END ----------------
-
 	std::string cameraID; 
 	int id = m_camera->GetID();
 	if (id == 1)
@@ -117,9 +108,12 @@ void Scene::ImGuiScene()
 	if (ImGui::CollapsingHeader("Ambient Light"))
 	{
 		ImGui::Indent();
-		if (ImGui::Button("Rotate Direction"))
-			RotateAmbient = !RotateAmbient;
-
+		ImGui::SliderFloat3("Color", &m_ambientLight[0], 0.0f, 20.0f);
+		ImGui::Unindent();
+	}
+	if (ImGui::CollapsingHeader("Dynamic Light"))
+	{
+		ImGui::Indent();
 		std::string temp;
 		temp = "Light Direction";
 		ImGui::SliderFloat3(temp.c_str(), &m_light.m_direction[0], -20.0f, 20.0f);

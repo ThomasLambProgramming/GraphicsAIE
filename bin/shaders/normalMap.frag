@@ -87,22 +87,13 @@ void main()
     }
 
     // Determine the value of the ambient
-    vec3 ambient = AmbientColor * Ka * texDiffuse;
+    vec3 ambient = AmbientColor * Ka;
 
     // Determine the value of the diffuse
     vec3 diffuse = Kd * texDiffuse * diffuseTotal;
 
     // Determnine the value of the specular
     vec3 specular = Ks * texSpecular * specularTotal;
-
-    // Show the normals
-    // FragColor = vec4(N, 1);
-
-    // Show the texture normals
-    // FragColor =  vec4(texNormal, 1);
-
-    // Show without texture
-    FragColor = vec4(ambient + lambertTerm + specular, 1);
 
     // Output the final color
     FragColor = vec4(ambient + diffuse + specular, 1);

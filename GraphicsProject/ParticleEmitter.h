@@ -34,20 +34,24 @@ public:
 	void Draw();
 
 	float* GetEmitRate() { return &m_emitRate; }
-
+	void SetEmitRate() { m_emitRate = 1.0f / m_imguiRate; }
 	float* GetMinLife() { return &m_lifespanMin; }
 	float* GetMaxLife() { return &m_lifespanMax; }
 
 	float* GetMinVel() { return &m_velocityMin; }
-	float* GetMax() { return &m_velocityMax; }
+	float* GetMaxVel() { return &m_velocityMax; }
 
 	float* GetStartSize() { return &m_startSize; }
 	float* GetEndSize() { return &m_endSize; }
 
-	glm::vec4* GetStartColour() { return &m_startColour; }
-	glm::vec4* GetEndColour() { return &m_endColour; }
+	glm::vec4& GetStartColour() { return m_startColour; }
+	glm::vec4& GetEndColour() { return m_endColour; }
+	
+	glm::vec3& GetPosition() { return m_position; }
 
-
+	//this was to avoid using a static variable
+	//and so that the imgui wouldnt cause a divide loop
+	float m_imguiRate;
 protected:
 	Particle* m_particles;
 	unsigned int m_firstDead;

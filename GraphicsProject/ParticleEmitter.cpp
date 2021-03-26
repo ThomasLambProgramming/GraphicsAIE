@@ -32,7 +32,7 @@ void ParticleEmitter::Initalise(unsigned int a_maxParticles, unsigned int a_emit
 	// set up the emit timers
 	m_emitTimer = 0;
 	m_emitRate = 1.0f / a_emitRate;
-
+	m_imguiRate = a_emitRate;
 	// add in all arguments to set variables
 	m_startColour = a_startColour;
 	m_endColour = a_endColour;
@@ -155,9 +155,14 @@ void ParticleEmitter::Update(float deltaTime, glm::vec3 cameraPos)
 			//create all the xyz basis vectors to create a matrix four that will transform 
 			//the positions and rotations of the particles to face the correct way
 			//i know the explaination isnt the greatest but its so the "forward" axis is facing camera
+
+			
 			glm::vec3 zAxis = glm::normalize(cameraPos - particle->m_position);
-			glm::vec3 xAxis = glm::normalize(glm::cross(glm::vec3(cameraPos.x), zAxis));
-			glm::vec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+			//I had to add the 0.001f because the way all this is made + how i changed it if the x position is 0
+			//it makes the billboard 0, so having that slight amount makes it fine, (it worked fine but for the 
+			// x and y cameras it would appear because its x was 0)
+			glm::vec3 xAxis = glm::normalize(glm::cross(glm::vec3(cameraPos.x + 0.001f ,0,0), zAxis));
+			glm::vec3 yAxis = glm::cross(zAxis, xAxis); 
 
 
 			glm::mat4 billboard(glm::vec4(xAxis,0),

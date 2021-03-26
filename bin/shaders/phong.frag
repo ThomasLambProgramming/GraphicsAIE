@@ -81,13 +81,6 @@ void main()
 
     // Determnine the value of the specular
     vec3 specular = Ks * specularTotal;
-
-    // Show the normals
-    // FragColor = vec4(N, 1);
-
-    // Show without texture
-    FragColor = vec4(ambient + lambertTerm + specular, 1);
-
     // Output the final color
     FragColor = vec4(ambient + diffuse + specular, 1);
 }
