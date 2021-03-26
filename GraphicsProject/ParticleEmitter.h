@@ -29,7 +29,7 @@ public:
 		const glm::vec4& a_startColour, const glm::vec4& a_endColour);
 	
 
-	void Update(float deltaTime, glm::vec3 cameraPos);
+	void Update(float deltaTime, glm::mat4 a_cameraTransform);
 	void Emit();
 	void Draw();
 

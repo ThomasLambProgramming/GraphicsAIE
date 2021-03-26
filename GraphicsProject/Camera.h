@@ -24,14 +24,14 @@ public:
 
 	void SetStationary(bool a_state) { isStationary = a_state; }
 
+	glm::mat4 MakeTransform();
 	
-	glm::mat4 GetTransform();
 
 	glm::vec3 forward = { 0,0,0 };
 private:
 
-	float m_theta; //in degrees
-	float m_phi; //in degrees
+	float m_theta; //in degrees X 
+	float m_phi; //in degrees Y
 	glm::vec3 m_position;
 
 

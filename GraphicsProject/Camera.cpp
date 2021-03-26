@@ -97,15 +97,9 @@ void Camera::SetRotation(float x, float y)
 	m_phi = y;
 }
 
-glm::mat4 Camera::GetTransform()
-{
-	
-	return glm::mat4(
-		1, 0, 0, m_position.x,
-		0, 1, 0, m_position.y,
-		0, 0, 1, m_position.z,
-		0, 0, 0, 1
-	);
-}
 
+glm::mat4 Camera::MakeTransform()
+{
+	return glm::translate(glm::mat4(1), m_position);
+}
 

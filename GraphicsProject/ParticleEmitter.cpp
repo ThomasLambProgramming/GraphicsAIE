@@ -105,7 +105,7 @@ void ParticleEmitter::Initalise(unsigned int a_maxParticles, unsigned int a_emit
 	delete[] indexData;
 }
 
-void ParticleEmitter::Update(float deltaTime, glm::vec3 cameraPos)
+void ParticleEmitter::Update(float deltaTime, glm::mat4 a_cameraTransform)
 {
 	m_emitTimer += deltaTime;
 	while (m_emitTimer > m_emitRate)
@@ -157,11 +157,11 @@ void ParticleEmitter::Update(float deltaTime, glm::vec3 cameraPos)
 			//i know the explaination isnt the greatest but its so the "forward" axis is facing camera
 
 			
-			glm::vec3 zAxis = glm::normalize(cameraPos - particle->m_position);
+			glm::vec3 zAxis = glm::normalize(glm::vec3(a_cameraTransform[3]) - particle->m_position);
 			//I had to add the 0.001f because the way all this is made + how i changed it if the x position is 0
 			//it makes the billboard 0, so having that slight amount makes it fine, (it worked fine but for the 
 			// x and y cameras it would appear because its x was 0)
-			glm::vec3 xAxis = glm::normalize(glm::cross(glm::vec3(cameraPos.x + 0.001f ,0,0), zAxis));
+			glm::vec3 xAxis = glm::normalize(glm::cross(glm::vec3(a_cameraTransform[1]), zAxis));
 			glm::vec3 yAxis = glm::cross(zAxis, xAxis); 
 
 

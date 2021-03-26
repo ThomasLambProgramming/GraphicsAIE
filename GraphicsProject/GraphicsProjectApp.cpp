@@ -79,7 +79,7 @@ void GraphicsProjectApp::update(float deltaTime) {
 	Gizmos::addTransform(mat4(1));
 	
 	m_camera->Update(deltaTime);
-	m_emitter->Update(deltaTime, m_camera->GetPosition());
+	m_emitter->Update(deltaTime, m_camera->MakeTransform());
 	
 	aie::Input* input = aie::Input::getInstance();
 
