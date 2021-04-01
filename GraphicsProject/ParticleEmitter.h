@@ -51,8 +51,12 @@ public:
 
 	//this was to avoid using a static variable
 	//and so that the imgui wouldnt cause a divide loop
+	//its a seperated spawn rate so the number is nice on the 
+	//imgui instead of a small float number
 	float m_imguiRate;
+
 protected:
+	
 	Particle* m_particles;
 	unsigned int m_firstDead;
 	unsigned int m_maxParticles;

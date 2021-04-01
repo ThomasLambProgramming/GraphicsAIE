@@ -35,9 +35,11 @@ bool GraphicsProjectApp::startup() {
 	m_viewMatrix = glm::lookAt(vec3(10), vec3(0), vec3(0, 1, 0));
 	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, (float)getWindowWidth() / (float)getWindowHeight(), 0.1f, 1000.0f);
 
+	//make the initial cameras otherwise a undeclared camera is used which = big errors
 	m_camera = new Camera();
 	m_camera->SetID(1);
 	
+	//init the particle emitter
 	m_emitter = new ParticleEmitter();
 	m_emitter->Initalise(1000, 50, 
 		0.1f, 1.0f, 
@@ -45,6 +47,7 @@ bool GraphicsProjectApp::startup() {
 		0.3f, 0.1f, 
 		glm::vec4(1, 0, 0, 1), glm::vec4(1, 1, 0, 1));
 
+	//make an inital light
 	Light light;
 	light.m_color = { 1,1,1 };
 	light.m_direction = { 1, -1,1 };
@@ -70,20 +73,24 @@ void GraphicsProjectApp::update(float deltaTime) {
 		Gizmos::addLine(vec3(-10 + i, 0, 10), vec3(-10 + i, 0, -10), i == 10 ? white : black);
 		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? white : black);
 	}
+	//load all imgui needed
 	ImguiLogic();
 
 	float time = getTime();
+	//this makes the light rotate like the sun to show off the lighting 
 	m_scene->GetLight().m_direction = glm::normalize(glm::vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
 
 	// add a transform so that we can see the axis
 	Gizmos::addTransform(mat4(1));
 	
+	//update the current camera
 	m_camera->Update(deltaTime);
+	//update emitter
 	m_emitter->Update(deltaTime, m_camera->MakeTransform());
 	
 	aie::Input* input = aie::Input::getInstance();
 
-
+	//Camera changing logic 
 	if (input->isKeyDown(aie::INPUT_KEY_1))
 		m_scene->ChangeCamera(1);
 	else if (input->isKeyDown(aie::INPUT_KEY_2))
@@ -93,6 +100,7 @@ void GraphicsProjectApp::update(float deltaTime) {
 	else if (input->isKeyDown(aie::INPUT_KEY_4))
 		m_scene->ChangeCamera(4);
 
+	//change the camera to be the current 
 	m_camera = m_scene->GetCamera();
 
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))

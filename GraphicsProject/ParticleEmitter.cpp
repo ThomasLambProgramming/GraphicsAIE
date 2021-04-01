@@ -72,17 +72,19 @@ void ParticleEmitter::Initalise(unsigned int a_maxParticles, unsigned int a_emit
 		indexData[i * 6 + 5] = i * 4 + 3;
 	}
 
-	//generate all the buffers needed
+	//generate all the buffers and vertex arrays needed
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
 	glGenBuffers(1, &m_vbo);
 	glGenBuffers(1, &m_ibo);
 
+	//bind and fill the buffers with data
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 4 * sizeof(ParticleVertex), 
 		m_vertexData, GL_DYNAMIC_DRAW);
 
+	//bind and fill index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_maxParticles * 6 * sizeof(unsigned int), 
 		indexData, GL_STATIC_DRAW);
@@ -102,6 +104,7 @@ void ParticleEmitter::Initalise(unsigned int a_maxParticles, unsigned int a_emit
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); 
+	//delete the index data as its now in gpu memory 
 	delete[] indexData;
 }
 
@@ -115,13 +118,16 @@ void ParticleEmitter::Update(float deltaTime, glm::mat4 a_cameraTransform)
 	}
 	unsigned int quad = 0;
 
+	//organise the array for the dead and the alive particles
 	for (unsigned int i = 0; i < m_firstDead; i++)
 	{
+		//get the current particle
 		Particle* particle = &m_particles[i];
 		particle->m_lifetime += deltaTime;
-
+		//update particle
 		if (particle->m_lifetime >= particle->m_lifespan)
 		{
+			//if particle dead
 			*particle = m_particles[m_firstDead - 1];
 			m_firstDead--;
 		}
@@ -156,20 +162,21 @@ void ParticleEmitter::Update(float deltaTime, glm::mat4 a_cameraTransform)
 			//the positions and rotations of the particles to face the correct way
 			//i know the explaination isnt the greatest but its so the "forward" axis is facing camera
 
-			
+			//get the z to equal the direction from particle to camera
 			glm::vec3 zAxis = glm::normalize(glm::vec3(a_cameraTransform[3]) - particle->m_position);
-			//I had to add the 0.001f because the way all this is made + how i changed it if the x position is 0
-			//it makes the billboard 0, so having that slight amount makes it fine, (it worked fine but for the 
-			// x and y cameras it would appear because its x was 0)
+			//cross product with z and (0,1,0) vector to get the x (perpendicular)
 			glm::vec3 xAxis = glm::normalize(glm::cross(glm::vec3(a_cameraTransform[1]), zAxis));
+			//now that we have the x and z do the cross again for perpendicular between
+			//x and z to get the y axis
 			glm::vec3 yAxis = glm::cross(zAxis, xAxis); 
 
-
+			
 			glm::mat4 billboard(glm::vec4(xAxis,0),
 								glm::vec4(yAxis,0),
 								glm::vec4(zAxis,0),
 								glm::vec4(0,0,0,1));
 
+			//update the quad to be transformed by billboard
 			m_vertexData[quad * 4 + 0].m_position = billboard * 
 				m_vertexData[quad * 4 + 0].m_position + glm::vec4(particle->m_position, 0);
 
@@ -221,9 +228,12 @@ void ParticleEmitter::Emit()
 
 void ParticleEmitter::Draw()
 {
+	//bind the buffers, give only the data we need instead of the whole buffer
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, m_firstDead * 4 * sizeof(ParticleVertex), m_vertexData);
 
+	//bind the vertex array to be drawn then draw the amount of particles
+	// * 6 because each particle has 3 vertexs per trianlge * 2 for square
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, m_firstDead * 6, GL_UNSIGNED_INT, 0);
 }

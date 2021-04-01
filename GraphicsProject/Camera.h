@@ -34,10 +34,11 @@ private:
 	float m_phi; //in degrees Y
 	glm::vec3 m_position;
 
-
+	//for ease of switching each camera has an id;
 	int m_ID;
 	bool isStationary = false;
 
+	//mouse positions
 	float m_lastMouseX, m_lastMouseY;
 
 	

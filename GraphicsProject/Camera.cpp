@@ -12,10 +12,12 @@ Camera::Camera()
 
 void Camera::Update(float a_deltaTime)
 {
+	//dont let the camera do update function if stationary
 	if (isStationary)
 		return;
 
 	aie::Input* input = aie::Input::getInstance();
+	//get rotation in radians
 	float thetaR = glm::radians(m_theta);
 	float phiR = glm::radians(m_phi);
 
@@ -26,7 +28,7 @@ void Camera::Update(float a_deltaTime)
 	glm::vec3 right(-glm::sin(thetaR), 0, glm::cos(thetaR));
 	glm::vec3 up(0, 1, 0);
 
-	
+	//Movement 
 	#pragma region InputMovement
 	if (input->isKeyDown(aie::INPUT_KEY_X))
 	{
@@ -76,6 +78,7 @@ void Camera::Update(float a_deltaTime)
 
 glm::mat4 Camera::GetViewMatrix()
 {
+	//Get the view matrix to transform models to view space for rendering
 	float thetaR = glm::radians(m_theta);
 	float phiR = glm::radians(m_phi);
 	forward = glm::vec3(glm::cos(phiR) * glm::cos(thetaR),
@@ -87,9 +90,12 @@ glm::mat4 Camera::GetViewMatrix()
 
 glm::mat4 Camera::GetProjectionMatrix(float a_width, float a_height)
 {	
+	//use the glm fuctions to calculate the projection matrix for transforming
+	//into correct space
 	return glm::perspective(glm::pi<float>() * 0.25f, 
 		a_width/ a_height, 0.1f, 1000.0f);
 }
+
 
 void Camera::SetRotation(float x, float y)
 {
@@ -97,7 +103,7 @@ void Camera::SetRotation(float x, float y)
 	m_phi = y;
 }
 
-
+//make a transform with the position and a identity matrix
 glm::mat4 Camera::MakeTransform()
 {
 	return glm::translate(glm::mat4(1), m_position);

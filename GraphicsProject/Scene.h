@@ -69,6 +69,7 @@ protected:
 	//objects
 	std::list<Instance*> m_instances;
 
+	//seperate values for the shaders
 	glm::vec3 m_pointLightPositions[MAX_LIGHTS];
 	glm::vec3 m_pointLightColors[MAX_LIGHTS];
 }; 

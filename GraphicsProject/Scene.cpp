@@ -21,7 +21,7 @@ Scene::~Scene()
 	}
 	
 }
-
+//add a model 
 void Scene::AddInstances(Instance* a_instance)
 {
 	m_instances.push_back(a_instance);
@@ -29,11 +29,13 @@ void Scene::AddInstances(Instance* a_instance)
 
 void Scene::Draw()
 {
+	//get all light information
 	for (int i = 0; i < MAX_LIGHTS && i < m_pointLights.size(); i++)
 	{
 		m_pointLightPositions[i] = m_pointLights[i].m_direction;
 		m_pointLightColors[i] = m_pointLights[i].m_color;
 	}
+	//draw each instance
 	for (auto i = m_instances.begin(); i != m_instances.end(); i++)
 	{
 		Instance* instance = *i;
@@ -66,14 +68,18 @@ void Scene::ImGuiScene()
 	ImGui::Text(cameraID.c_str());
 	ImGui::Text("Press 1 for flyby camera");
 	ImGui::Text("Press 2-4 for X Y Z Axis Stationary Cameras");
+
+	//collapsing header for scene management
 	if (ImGui::CollapsingHeader("Objects"))
 	{
+		//indenting for nice formatting
 		ImGui::Indent();
 		for (auto i : m_instances)
 		{
+			
 			if (ImGui::CollapsingHeader(i->m_objectName.c_str()))
 			{
-
+				//all the variables for the decompose function
 				glm::mat4 objectTransform = i->GetTransform();
 				glm::vec3 o_scale;
 				glm::quat o_rotation;
@@ -90,14 +96,14 @@ void Scene::ImGuiScene()
 				ImGui::SliderFloat3(temp.c_str(), &o_translation[0], -20.0f, 20.f);
 
 				
-				//std::cout << euler.x << " " << euler.y << " " << euler.z << std::endl;
-				
+				//sliders for the vectors3				
 				temp = i->m_objectName + "Rotation";
 				ImGui::SliderFloat3(temp.c_str(), &i->m_rotation[0], -90.0f, 90.f);
 
 				temp = i->m_objectName + " Scale";
 				ImGui::SliderFloat3(temp.c_str(), &o_scale[0], 0.2f, 5.0f);
 
+				//make the transform with its position rotation and scale
 				i->SetTransform(i->MakeTransform(o_translation, i->m_rotation, o_scale));
 				
 				ImGui::Unindent();
@@ -107,6 +113,7 @@ void Scene::ImGuiScene()
 	}
 	if (ImGui::CollapsingHeader("Ambient Light"))
 	{
+		//ambient is just rgb values (vector3)
 		ImGui::Indent();
 		ImGui::SliderFloat3("Color", &m_ambientLight[0], 0.0f, 20.0f);
 		ImGui::Unindent();
@@ -116,6 +123,7 @@ void Scene::ImGuiScene()
 		ImGui::Indent();
 		std::string temp;
 		temp = "Light Direction";
+		//sun settings (vec3 direction) vec3 color
 		ImGui::SliderFloat3(temp.c_str(), &m_light.m_direction[0], -20.0f, 20.0f);
 
 		temp = "Light Color";

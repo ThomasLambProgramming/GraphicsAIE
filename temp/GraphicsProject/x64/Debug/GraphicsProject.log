@@ -1,5 +1,9 @@
-﻿  Camera.cpp
-C:\Users\Luke\Desktop\GraphicsAIE\GraphicsProject\Camera.cpp(57,11): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\Luke\Desktop\GraphicsAIE\GraphicsProject\Camera.cpp(58,11): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+﻿  GraphicsProjectApp.cpp
+C:\Users\Thomas Lamb\Desktop\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(114,86): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\Thomas Lamb\Desktop\GraphicsAIE\GraphicsProject\GraphicsProjectApp.cpp(114,67): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  Instance.cpp
+  Shader.cpp
+  main.cpp
+  Generating Code...
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  GraphicsProject.vcxproj -> C:\Users\Luke\Desktop\GraphicsAIE\temp\GraphicsProject\x64\Debug\GraphicsProject.exe
+  GraphicsProject.vcxproj -> C:\Users\Thomas Lamb\Desktop\GraphicsAIE\temp\GraphicsProject\x64\Debug\GraphicsProject.exe

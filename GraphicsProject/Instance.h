@@ -12,6 +12,7 @@ namespace aie
 class Instance
 {
 public:
+	//I dont think any of this needs comments as they are all self explanatory 
 	Instance(glm::mat4 a_transform, aie::OBJMesh* a_mesh, aie::ShaderProgram* a_shader);
 	
 	Instance(glm::vec3 a_position, glm::vec3 a_eulerAngles,
@@ -29,6 +30,7 @@ public:
 
 	static glm::mat4 MakeTransform(glm::vec3 a_position, glm::vec3 a_eulerAngles, glm::vec3 a_scale);
 
+	
 	std::string m_objectName;
 	glm::vec3 m_rotation;
 protected:
