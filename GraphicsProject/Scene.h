@@ -1,4 +1,13 @@
 #pragma once
+/*
+	MADE BY THOMAS LAMB
+	DATE MADE 18/03/2021
+	This header file and cpp is made for
+	the creation of a scene to reduce the size of the
+	graphicsprojectapp file and to abstract out in case multiple
+	scenes are to be used
+	Last Edited 9/04/2021
+*/
 #include <list>
 #include <vector>
 #include <glm/glm.hpp>

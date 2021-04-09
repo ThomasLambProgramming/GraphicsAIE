@@ -1,4 +1,11 @@
 #pragma once
+/*
+	MADE BY THOMAS LAMB
+	DATE MADE 13/03/2021
+	This header file and cpp is made for
+	managing the entire application
+	Last Edited 9/04/2021
+*/
 #include "Shader.h"
 #include "Application.h"
 #include <glm/mat4x4.hpp>
@@ -11,6 +18,7 @@
 #include "Instance.h"
 #include "Scene.h"
 #include "ParticleEmitter.h"
+
 
 class GraphicsProjectApp : public aie::Application {
 protected:

@@ -1,4 +1,13 @@
 #pragma once
+
+/*
+	MADE BY THOMAS LAMB
+	DATE MADE 18/03/2021
+	This header file and cpp is made for
+	managing a instance of a model. and
+	to return its values for rendering
+	Last Edited 9/04/2021
+*/
 #include <glm/glm.hpp>
 #include <string>
 class Camera;

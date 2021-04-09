@@ -1,5 +1,16 @@
 #pragma once
 #include "glm/ext.hpp"
+
+/*
+	MADE BY THOMAS LAMB
+	DATE MADE 13/03/2021
+	This header file and cpp is made for
+	managing cameras, and returning all values needed
+	Last Edited 9/04/2021
+*/
+
+
+
 class Camera
 {
 public:

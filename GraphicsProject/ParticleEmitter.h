@@ -1,4 +1,12 @@
 #pragma once
+/*
+	MADE BY THOMAS LAMB
+	DATE MADE 25/03/2021
+	This header file and cpp is made for
+	the creation of a particle emitter system
+	and for returning any value needed
+	Last Edited 9/04/2021
+*/
 #include <glm/glm.hpp>
 
 struct Particle
